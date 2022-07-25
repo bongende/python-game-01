@@ -5,12 +5,18 @@ part 1 getting started
 """
 
 import turtle
+import winsound
 
 wn = turtle.Screen()
 wn.title("Simple plong game by Christo")
 wn.bgcolor("black")
 wn.setup(width=800, height=600)
 wn.tracer(0)
+
+# score
+
+score_a = 0
+score_b = 0
 
 # paddle A
 paddle_a = turtle.Turtle()
@@ -50,8 +56,7 @@ pen.color("white")
 pen.penup()
 pen.hideturtle()
 pen.goto(0, 260)
-pen.write("player A: 0 player B: 0", align="center", font=("Courier", 24, "normal"))
-
+pen.write("player A: {} + player B: {} ".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
 
 # Functions for paddles
 
@@ -113,19 +118,36 @@ while True:
     if ball.ycor() > 290:
         ball.sety(290)
         ball.dy *= -1
+        winsound.PlaySound("Touche.wav", winsound.SND_ASYNC)
     elif ball.ycor() < -290:
         ball.sety(-290)
         ball.dy *= -1
+        winsound.PlaySound("Touche.wav", winsound.SND_ASYNC)
     elif ball.xcor() > 390:
         ball.goto(0, 0)
         ball.dx *= -1
+        pen.clear()
+        score_a += 1
+        pen.write("player A: {} + player B: {} ".format(score_a, score_b), align="center", font=("Courier", 24, "normal"))
+
     elif ball.xcor() < -390:
         ball.goto(0, 0)
         ball.dx *= -1
+        score_b += 1
+        pen.clear()
+        pen.write("player A: {} + player B: {} ".format(score_a, score_b), align="center",
+                  font=("Courier", 24, "normal"))
+
+
+
 
     # paddle and ball collision
 
     if ball.xcor() > 330 and (ball.ycor() < paddle_b.ycor() + 40 and ball.ycor() > paddle_b.ycor() -40 ) :
+        ball.setx(330)
+        winsound.PlaySound("Un seul pop.wav", winsound.SND_ASYNC)
         ball.dx *= -1
     if ball.xcor() < -330 and (ball.ycor() < paddle_a.ycor() + 40 and ball.ycor() > paddle_a.ycor() -40 ) :
+        ball.setx(-330)
+        winsound.PlaySound("Un seul pop.wav", winsound.SND_ASYNC)
         ball.dx *= -1
